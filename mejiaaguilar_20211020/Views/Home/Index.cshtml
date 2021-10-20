@@ -1,0 +1,162 @@
+﻿@using mejiaaguilar_20211020.Models
+@model mejiaaguilar_20211020.Models.EmpleadoVM
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p class="btn btn-success">
+    @Html.ActionLink("Agregar Empleado", "NewEmpleado")
+</p>
+<table class="table table-striped table-hover">
+    <tr>
+        <th>
+            ID Empleado.
+        </th>
+        <th>
+            Nombre Empleado.
+        </th>
+        <th>
+            Apellido Empleado.
+        </th>
+        <th>
+            Departamento Empleado.
+        </th>
+        <th>
+            Fecha de Ingredo de Empleado.
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.lstEmpleados) {
+    <tr id="emp_@item.idEmp">
+        <td>
+            @Html.DisplayFor(modelItem => item.idEmp)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.lastname)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DeptName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.fechaingreso)
+        </td>
+        <td>
+            <button class="btn btn-primary btnDetails" data-codigo="@item.idEmp" data-target="#staticBackdrop">Ver Detalles</button>
+            <a href="@Url.Action("EditEmpleado", "Home")?id=@item.idEmp" class="btn btn-success">Editar</a>
+            <button class="btn btn-danger btnEliminar" data-codigo="@item.idEmp" >Eliminar</button>
+        </td>
+    </tr>
+}
+
+</table>
+
+<div class="row">
+    <div class="col-sm-4 col-lg-4 col-md-4">Total de Registros : @Model.TotalReg</div>
+    <div class="col-sm-4 col-lg-4 col-md-4"></div>
+    <div class="col-sm-4 col-lg-4 col-md-4">
+        @{Html.RenderPartial("_Pager", Model);}
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-url="@Url.Action("GetDeatilsModal", "Home")" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="true">
+    @{
+        Html.RenderPartial("~/Views/Home/_PartialDetalleEmpleado.cshtml", new EmpleadoVM());
+    }
+</div>
+
+<input type="hidden" id="urlDetailsModal" value="@Url.Action("GetDeatilsModal", "Home")" />
+<input type="hidden" id="urlEliminarEmpleado" value="@Url.Action("EliminarEmpleado", "Home")" />
+
+@section Scripts{
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+            $('.btnEliminar').on('click', function (e) {
+                var idEmpleado = $(this).data('codigo');
+                var url = $('#urlEliminarEmpleado').val();
+                Swal.fire({
+                    title: "Atencion!",
+                    text: "Este registro sera eliminado y no podra recuperarse!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Si, deseo eliminarlo",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type: "post",
+                            url: url,
+                            dataType: "json",
+                            data: { id: idEmpleado },
+                            success: function (res) {
+                                $('#emp_' + idEmpleado).remove();
+                                Swal.fire({
+                                    title: "EXITO!",
+                                    text: "El Registro se elimino con exito!",
+                                    icon: "success"
+                                })
+                            }, error: function (er) {
+                                Swal.fire({
+                                    title: "Oops!",
+                                    text: "Parece que ha ocurrido un error, intentelo mas tarde!",
+                                    icon: "danger"
+                                })
+                            }
+                        })
+                    }
+                })
+            });
+
+            var message = "@ViewBag.Message";
+            if (message == "EditAlert") {
+                Swal.fire(
+                    'Listo!',
+                    'Se ha Editado con Exito!',
+                    'success'
+                )
+            } else if (message == "NewAlert") {
+                Swal.fire(
+                    'Listo!',
+                    'Se ha Agregado un nuevo Empleado!',
+                    'success'
+                )
+            }
+
+            $('.btnDetails').on('click', function (e) {
+                e.preventDefault;
+                var codigo = $(this).data('codigo');
+                var url = $('#urlDetailsModal').val();
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    dataType: "json",
+                    data: { id: codigo },
+                    success: function (res) {
+                        $('#staticBackdrop').html(res.partial);
+                        $('#staticBackdrop').modal("show");
+                    }
+                })
+            })
+        })
+
+        $(document).on('click', '.CerrarModal', function (e) {
+            $('#staticBackdrop').modal('hide')
+        })
+
+        $(document).on('click', '.close', function (e) {
+            $('#staticBackdrop').modal('hide')
+        })
+
+    </script>
+    }

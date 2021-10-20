@@ -1,0 +1,70 @@
+﻿@model mejiaaguilar_20211020.Models.EmpleadoVM
+
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="btn btn-close close" aria-label="Close"><span aria-hidden="true"></span></button>
+        </div>
+        <div class="modal-body">
+            <div class="grid-containermodalsito">
+                <div class="modalcuerpo">
+                    <div class="row">
+                        <center><h3>Datos de la Cuenta: </h3></center>
+                        <hr />
+                        <div class="col-sm-2 col-md-2 col-lg-2">
+                            <label>ID Empleado:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.idEmp
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <label>Nombre:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.name
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6">
+                            <label>Apellido:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.lastname
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <label>Direccion:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.address
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <label>Teledono:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.telefono
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <label>Departamento:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.DeptName
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <label>Fecha Inicio:</label>
+                            <div class="input-group mb-2 mr-sm-2 text-danger">
+                                @Model.fechaingreso
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <center>
+            <div class="modal-footer text-center">
+                <button type="button" class="btn btn-secondary CerrarModal">Cerrar</button>
+            </div>
+        </center>
+    </div>
+</div>
+
